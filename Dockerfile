@@ -39,24 +39,18 @@ WORKDIR /var/www
 # Copy application code
 COPY . .
 
-# Ensure .env file exists
-RUN if [ ! -f .env ]; then cp .env.example .env; fi
-
 # Set correct permissions for Laravel
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-# Install PHP dependencies with Composer
-RUN composer install --optimize-autoloader --no-dev --prefer-dist
+# Install PHP dependencies
+RUN composer install --optimize-autoloader --no-dev
 
-# Laravel optimizations
-RUN php artisan key:generate \
-    && php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache
+# Cache Laravel configuration
+RUN php artisan config:cache
 
-# Expose port 9000 (default for PHP-FPM)
-EXPOSE 9000
+# Expose port
+EXPOSE 8000
 
-# Start PHP-FPM server (recommended for production)
-CMD ["php-fpm"]
+# Start Laravel server
+CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
