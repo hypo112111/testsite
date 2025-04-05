@@ -39,6 +39,9 @@ WORKDIR /var/www
 # Copy application code
 COPY . .
 
+# Ensure .env file exists
+RUN if [ ! -f .env ]; then cp .env.example .env; fi
+
 # Set correct permissions for Laravel
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
