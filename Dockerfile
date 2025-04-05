@@ -43,14 +43,17 @@ COPY . .
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-# Install PHP dependencies
-RUN composer install --optimize-autoloader --no-dev
+# Install PHP dependencies with Composer
+RUN composer install --optimize-autoloader --no-dev --prefer-dist
 
-# Cache Laravel configuration
-RUN php artisan config:cache
+# Laravel optimizations
+RUN php artisan key:generate \
+    && php artisan config:cache \
+    && php artisan route:cache \
+    && php artisan view:cache
 
-# Expose port
-EXPOSE 8000
+# Expose port 9000 (default for PHP-FPM)
+EXPOSE 9000
 
-# Start Laravel server
-CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
+# Start PHP-FPM server (recommended for production)
+CMD ["php-fpm"]
