@@ -49,6 +49,9 @@ RUN chown -R www-data:www-data storage bootstrap/cache \
 # Install PHP dependencies
 RUN composer install --optimize-autoloader --no-dev --ignore-platform-req=ext-mongodb
 
+# Install CA certificates
+RUN apt-get update && apt-get install -y ca-certificates && update-ca-certificates
+
 # Cache Laravel configuration
 #RUN php artisan config:cache
 
