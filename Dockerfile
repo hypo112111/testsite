@@ -44,7 +44,7 @@ RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
 # Install PHP dependencies
-RUN composer install --optimize-autoloader --no-dev
+RUN composer self-update
 
 # Cache Laravel configuration
 RUN php artisan config:cache
@@ -53,5 +53,5 @@ RUN php artisan config:cache
 EXPOSE 8000
 
 # Start Laravel server
-CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
+CMD ["php-fpm"]
 
