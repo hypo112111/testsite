@@ -53,5 +53,5 @@ RUN php artisan config:cache
 EXPOSE 8000
 
 # Start Laravel server
-CMD ["php-fpm"]
+CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
 
