@@ -47,7 +47,7 @@ RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
 # Install PHP dependencies
-RUN composer install --ignore-platform-req=ext-mongodb
+RUN composer install --optimize-autoloader --no-dev --ignore-platform-req=ext-mongodb
 
 # Cache Laravel configuration
 #RUN php artisan config:cache
